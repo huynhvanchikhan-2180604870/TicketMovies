@@ -1,8 +1,6 @@
 package com.report.nhomchot.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,4 +20,7 @@ public class Movie {
     private String description;
     private Integer director;
     private LocalDateTime release_date;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }
