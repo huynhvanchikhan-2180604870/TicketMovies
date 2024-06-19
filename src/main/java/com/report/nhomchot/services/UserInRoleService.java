@@ -19,13 +19,13 @@ public class UserInRoleService {
 
     }
 
-    public List<Role> getAllRoleOfUser(UUID user_id){
-        return userInRoleRepository.getAllRoleOfUser(user_id);
-    }
-
-    public List<User> getAllUserOfRole(UUID role_id){
-        return userInRoleRepository.getAllUserOfRole(role_id);
-    }
+//    public List<Role> getAllRoleOfUser(UUID user_id){
+//        return userInRoleRepository.getAllRoleOfUser(user_id);
+//    }
+//
+//    public List<User> getAllUserOfRole(UUID role_id){
+//        return userInRoleRepository.getAllUserOfRole(role_id);
+//    }
 
     public UserInRole addUserInRole(UserInRole userInRole){
         return userInRoleRepository.save(userInRole);

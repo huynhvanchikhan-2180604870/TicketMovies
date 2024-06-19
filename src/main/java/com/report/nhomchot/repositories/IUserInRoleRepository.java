@@ -13,9 +13,9 @@ import java.util.UUID;
 
 @Repository
 public interface IUserInRoleRepository extends JpaRepository<UserInRole, UUID> {
-    @Query("SELECT r FROM UserInRole ur, Role r  WHERE ur.user.id = ?1 and r.id == ur.role")
-    List<Role> getAllRoleOfUser(UUID userId);
-
-    @Query("select u from UserInRole ur, User u where ur.user == ?1 and u.id == ur.id")
-    List<User> getAllUserOfRole(UUID id);
+//    @Query("SELECT r FROM UserInRole ur, Role r  WHERE ur.user.id = ?1 and r.id == ur.role")
+//    List<Role> getAllRoleOfUser(UUID userId);
+//
+//    @Query("select u from UserInRole ur, User u where ur.user == ?1 and u.id == ur.id")
+//    List<User> getAllUserOfRole(UUID id);
 }
