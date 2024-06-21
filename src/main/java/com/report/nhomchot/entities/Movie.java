@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
-@Setter
-@Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 @Data
 @Entity
 @Table(name = "movies")
@@ -20,7 +21,7 @@ public class Movie {
     private String description;
     private Integer director;
     private LocalDateTime release_date;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private String poster_url;
+    private UUID category_id;
+
 }

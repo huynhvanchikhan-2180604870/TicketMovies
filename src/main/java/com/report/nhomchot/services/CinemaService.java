@@ -1,9 +1,14 @@
 package com.report.nhomchot.services;
 
 import com.report.nhomchot.entities.Cinema;
+import com.report.nhomchot.models.CinemaModel;
 import com.report.nhomchot.repositories.ICinemaRepository;
+import com.report.nhomchot.repositories.repo.CinemaRepository;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +22,12 @@ public class CinemaService {
 
     public CinemaService() {}
 
-    public List<Cinema> getAllCimema(){
+    public Page<Cinema> getAllCinema(String name, int page, int size, String sortName, String sortDirect){
+        Pageable pageable = PageRequest.of(page, size);
+        return cinemaRepository.findAll(CinemaRepository.search(name, sortName, sortDirect), pageable);
+    }
+
+    public List<Cinema> getAllCinema(){
         return cinemaRepository.findAll();
     }
 

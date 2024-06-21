@@ -34,11 +34,11 @@ public class ShowTimeService {
         ShowTime existingShowTime = showTimeRepository.findById(showTime.getId())
                 .orElseThrow(() -> new IllegalStateException("showTime with ID " +
                         showTime.getId() + " does not exist."));
-        existingShowTime.setMovie(showTime.getMovie());
+        existingShowTime.setMovie_id(showTime.getMovie_id());
         existingShowTime.setPrice(showTime.getPrice());
         existingShowTime.setStartTime(showTime.getStartTime());
         existingShowTime.setEndTime(showTime.getEndTime());
-        existingShowTime.setTheater(showTime.getTheater());
+        existingShowTime.setTheater_id(showTime.getTheater_id());
 
         return showTimeRepository.save(existingShowTime);
     }

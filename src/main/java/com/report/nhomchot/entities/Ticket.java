@@ -15,15 +15,8 @@ import java.util.UUID;
 public class Ticket {
     @Id
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "showtime_id", nullable = false)
-    private ShowTime showtime;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
+    private UUID showtime_id;
+    private UUID user_id;
     private Integer seatNumber;
     private short status;
 }

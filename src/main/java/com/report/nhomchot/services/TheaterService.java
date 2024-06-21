@@ -32,7 +32,7 @@ public class TheaterService {
         Theater existingTheater = theaterRepository.findById(theater.getId())
                 .orElseThrow(() -> new IllegalStateException("theater with ID " +
                         theater.getId() + " does not exist."));
-        existingTheater.setCinema(theater.getCinema());
+        existingTheater.setCinema_id(theater.getCinema_id());
         existingTheater.setSeating_capacity(theater.getSeating_capacity());
         return theaterRepository.save(existingTheater);
     }

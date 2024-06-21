@@ -15,8 +15,6 @@ import java.util.UUID;
 public class Theater {
     @Id
     private UUID id;
-    @ManyToOne
-    @JoinColumn(name = "cinema_id", nullable = false)
-    private Cinema cinema;
+    private UUID cinema_id;
     private Integer seating_capacity;
 }
