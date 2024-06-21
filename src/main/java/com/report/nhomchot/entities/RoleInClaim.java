@@ -15,12 +15,7 @@ import java.util.UUID;
 public class RoleInClaim {
     @Id
     private UUID id;
+    private UUID role_id;
+    private UUID claim_id;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role; // Vai trò
-
-    @ManyToOne
-    @JoinColumn(name = "claim_id", nullable = false)
-    private Claim claim; // Quyền
 }

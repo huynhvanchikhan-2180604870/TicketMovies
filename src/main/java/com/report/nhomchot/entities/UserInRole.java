@@ -15,11 +15,7 @@ import java.util.UUID;
 public class UserInRole {
     @Id
     private UUID id;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Người dùng
+    private UUID user_id;
+    private UUID role_id;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role; // Vai trò
 }

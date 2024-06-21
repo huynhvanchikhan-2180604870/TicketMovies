@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout-admin::head"></th:block>
+<body>
+<th:block th:replace="layout-admin::header"></th:block>
+<th:block th:replace="layout-admin::sidebar"></th:block>
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Data Tables</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Tables</li>
+                <li class="breadcrumb-item active">Data</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <div class="text-end mb-3" id="add">
+    </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="m-auto mt-2 text-end">
+                            <button type="button" class="btn btn-outline-success text-end" data-toggle="modal" data-target="#addCategoryModal" id="btnCreateCategory">
+                                Create
+                            </button>
+                        </div>
+                        <div class="mt-3 me-auto" style="width: 20vw;">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control me-2" placeholder="Search by name" id="searchInput" style="width: 100px">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="$('#example').DataTable().ajax.reload();">Search</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <table id="example" class="display" style="width:100%; padding-top:20px;">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Age Accept</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Data will be added here by DataTables -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Edit Category</h5>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editCategoryForm">
+                    <!-- Name input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="CategoryName">Name</label>
+                        <input type="text" id="CategoryName" class="form-control" />
+
+                    </div>
+
+                    <!-- Age Accept input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="CategoryAgeAccept">Age Accept</label>
+                        <input type="text" id="CategoryAgeAccept" class="form-control" />
+
+                    </div>
+
+                    <input type="text" id="CategoryID" class="form-control" />
+                    <!-- Submit button -->
+                    <div class="text-center">
+                        <button type="submit" id="btnSubmitEdit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block" onclick="saveCategory()">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addCategoryForm">
+                    <!-- Name input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newCategoryName">Name</label>
+                        <input type="text" id="newCategoryName" class="form-control" />
+                    </div>
+
+                    <!-- CategoryAgeAccept input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newCategoryAgeAccept">Age Accept</label>
+                        <input type="text" id="newCategoryAgeAccept" class="form-control" />
+
+                    </div>
+                    <!-- Submit button -->
+                    <div class="text-center">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block" onclick="addCategory()" >Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete form-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Bạn có chắc là muốn xóa Category này không?</div>
+            <input type="text" id="deleteCategoryID">
+            <div class="modal-footer">
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger" onclick="deleteCategory()" >Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ALERT-->
+<!-- Modal -->
+
+<!-- Vendor JS Files -->
+<script src="/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="/admin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/admin/assets/vendor/chart.js/chart.umd.js"></script>
+<script src="/admin/assets/vendor/echarts/echarts.min.js"></script>
+<script src="/admin/assets/vendor/quill/quill.js"></script>
+<script src="/admin/assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="/admin/assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="/admin/assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/admin/assets/js/main.js"></script>
+<script src="/admin/assets/js/categories/category.js"></script>
+<script src="/admin/assets/js/categories/category-edit.js"></script>
+<script src="/admin/assets/js/categories/category-delete.js"></script>
+<script src="/admin/assets/js/categories/category-add.js"></script>
+<script>
+
+</script>
+</body>
+</html>

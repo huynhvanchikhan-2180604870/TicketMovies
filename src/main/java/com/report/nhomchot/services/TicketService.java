@@ -33,8 +33,8 @@ public class TicketService {
         Ticket existingTicket = ticketRepository.findById(ticket.getId())
                 .orElseThrow(() -> new IllegalStateException("ticket with ID " +
                         ticket.getId() + " does not exist."));
-        existingTicket.setShowtime(ticket.getShowtime());
-        existingTicket.setUser(ticket.getUser());
+        existingTicket.setShowtime_id(ticket.getShowtime_id());
+        existingTicket.setUser_id(ticket.getShowtime_id());
         existingTicket.setStatus(ticket.getStatus());
         existingTicket.setSeatNumber(ticket.getSeatNumber());
         return ticketRepository.save(existingTicket);

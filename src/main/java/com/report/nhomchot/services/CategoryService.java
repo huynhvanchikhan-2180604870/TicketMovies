@@ -1,8 +1,14 @@
 package com.report.nhomchot.services;
 
 import com.report.nhomchot.entities.Category;
+import com.report.nhomchot.entities.Cinema;
 import com.report.nhomchot.repositories.ICategoryRepository;
+import com.report.nhomchot.repositories.repo.CategoryRepository;
+import com.report.nhomchot.repositories.repo.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +26,15 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Page<Category> getAllCategory(String name, int page, int size, String sortName, String sortDirect){
+        Pageable pageable = PageRequest.of(page, size);
+        return categoryRepository.findAll(CategoryRepository.search(name, sortName, sortDirect), pageable);
+    }
+
     public Optional<Category> getCategoryById(UUID id){
         return categoryRepository.findById(id);
     }
+
 
     public Category addCategory(Category category){
         return categoryRepository.save(category);
