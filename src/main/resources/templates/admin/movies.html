@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout-admin::head"></th:block>
+<body>
+<th:block th:replace="layout-admin::header"></th:block>
+<th:block th:replace="layout-admin::sidebar"></th:block>
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Data Tables</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Tables</li>
+                <li class="breadcrumb-item active">Data</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <div class="text-end mb-3" id="add">
+    </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="m-auto mt-2 text-end">
+                            <button type="button" class="btn btn-outline-success text-end" data-toggle="modal" data-target="#addMovieModal" id="btnCreateMovie">
+                                Create
+                            </button>
+                        </div>
+                        <div class="mt-3 me-auto" style="width: 20vw;">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control me-2" placeholder="Search by name" id="searchInput" style="width: 100px">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="$('#example').DataTable().ajax.reload();">Search</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <table id="example" class="display" style="width:100%; padding-top:20px;">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Director</th>
+                                <th>Duration</th>
+                                <th>Authors</th>
+                                <th>Release date</th>
+                                <th>Poster</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Data will be added here by DataTables -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<!-- Edit Movie Modal -->
+<div class="modal fade" id="editMovieModal" tabindex="-1" aria-labelledby="editMovieModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Edit Movie</h5>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editMovieForm">
+                    <!-- Title input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MovieTitle">Title</label>
+                        <input type="text" id="MovieTitle" class="form-control" />
+                    </div>
+
+                    <!-- Title input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MovieDirector">Director</label>
+                        <input type="text" id="MovieDirector" class="form-control" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MovieAuthors">Authors</label>
+                        <input type="text" id="MovieAuthors" class="form-control" />
+                    </div>
+
+                    <!-- Description input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MovieDescription">Description</label>
+                        <textarea id="MovieDescription" class="form-control" rows="10" cols="30"></textarea>
+                    </div>
+
+
+                    <!-- Director input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MovieDuration">Duration</label>
+                        <input type="number" id="MovieDuration" class="form-control" />
+                    </div>
+
+                    <!-- Release date input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MovieReleaseDate">Release Date</label>
+                        <input type="date" id="MovieReleaseDate" class="form-control" />
+                    </div>
+
+                    <!-- Poster date input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="MoviePoster">Poster url</label>
+                        <input type="text" id="MoviePoster" class="form-control" />
+                    </div>
+                    <!-- Category date input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="CategorySelect">Select Category</label>
+                        <select id="CategorySelect" class="form-control"></select>
+                    </div>
+                    <input type="text" id="MovieID" class="form-control" />
+                    <!-- Submit button -->
+                    <div class="text-center mt-1">
+                        <button type="submit" id="btnSubmitEdit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block" onclick="saveMovie()">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal fade" id="addMovieModal" tabindex="-1" aria-labelledby="addMovieModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMovieModalLabel">Add Movie</h5>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addMovieForm">
+                    <!-- Title input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMovieTitle">Title</label>
+                        <input type="text" id="newMovieTitle" class="form-control" />
+                    </div>
+
+                    <!-- Description input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMovieDescription">Description</label>
+                        <textarea id="newMovieDescription" class="form-control" rows="10" cols="30"></textarea>
+                    </div>
+
+                    <!-- Director input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMovieDirector">Director</label>
+                        <input type="text" id="newMovieDirector" class="form-control" />
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMovieAuthors">Authors</label>
+                        <input type="text" id="newMovieAuthors" class="form-control" />
+                    </div>
+
+                    <!-- Release date input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMovieReleaseDate">Release Date</label>
+                        <input type="date" id="newMovieReleaseDate" class="form-control" />
+                    </div>
+
+                    <!-- Director input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMovieDuration">Duration</label>
+                        <input type="number" id="newMovieDuration" class="form-control" />
+                    </div>
+                    <!-- Poster date input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newMoviePoster">Poster url</label>
+                        <input type="text" id="newMoviePoster" class="form-control" />
+                    </div>
+                    <!-- Category date input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label class="form-label" for="newCategorySelect">Select Category</label>
+                        <select id="newCategorySelect" class="form-control"></select>
+                    </div>
+                    <!-- Submit button -->
+                    <div class="text-center">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-block" onclick="addMovie()" >Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete form-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Movie</h5>
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Bạn có chắc là muốn xóa Movie này không?</div>
+            <input type="text" id="deleteMovieID">
+            <div class="modal-footer">
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger" onclick="deleteMovie()" >Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ALERT-->
+<!-- Modal -->
+
+<!-- Vendor JS Files -->
+<script src="/admin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="/admin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/admin/assets/vendor/chart.js/chart.umd.js"></script>
+<script src="/admin/assets/vendor/echarts/echarts.min.js"></script>
+<script src="/admin/assets/vendor/quill/quill.js"></script>
+<script src="/admin/assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="/admin/assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="/admin/assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/admin/assets/js/main.js"></script>
+<script src="/admin/assets/js/movies/movies.js"></script>
+<script src="/admin/assets/js/movies/movies-edit.js"></script>
+<script src="/admin/assets/js/movies/movies-delete.js"></script>
+<script src="/admin/assets/js/movies/movies-add.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/vi.js"></script>
+
+<script>
+
+</script>
+</body>
+</html>
