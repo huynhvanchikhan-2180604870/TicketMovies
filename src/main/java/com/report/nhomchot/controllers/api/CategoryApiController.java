@@ -1,25 +1,31 @@
 package com.report.nhomchot.controllers.api;
 
-import com.report.nhomchot.entities.Category;
-import com.report.nhomchot.entities.Cinema;
-import com.report.nhomchot.models.CategoryModel;
-import com.report.nhomchot.models.CinemaModel;
-import com.report.nhomchot.models.FilterOption;
-import com.report.nhomchot.response.ResponseHandler;
-import com.report.nhomchot.services.CategoryService;
-import com.report.nhomchot.utils.Util;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import com.report.nhomchot.entities.Category;
+import com.report.nhomchot.models.CategoryModel;
+import com.report.nhomchot.models.FilterOption;
+import com.report.nhomchot.response.ResponseHandler;
+import com.report.nhomchot.services.CategoryService;
+import com.report.nhomchot.utils.Util;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/api/categories")
@@ -29,6 +35,14 @@ public class CategoryApiController {
 
     public CategoryApiController() {
     }
+
+    @RequestMapping(value = "/get-category/{id}", method=RequestMethod.GET)
+    public ResponseEntity<Object> getMovieById(@PathVariable UUID id) {
+        Category category = categoryService.getCategoryById(id).orElseThrow(() -> new IllegalStateException("Movie with ID " +
+                id + " does not exist."));
+        return ResponseHandler.responseBuilder("Success", HttpStatus.OK, category);
+    }
+    
 
     @RequestMapping(value = "/get-categories", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> getCinemas(
@@ -94,4 +108,11 @@ public class CategoryApiController {
         categoryService.deleteCategory(id);
         return ResponseHandler.responseBuilder("Updated successfully", HttpStatus.OK, categoryService.getAllCategory());
     }
+
+    @RequestMapping(value = "/get-all-categories", method=RequestMethod.GET)
+    public ResponseEntity<Object> getMovieAll() {
+        
+        return ResponseHandler.responseBuilder("Success", HttpStatus.OK, categoryService.getAllCategory());
+    }
+    
 }
