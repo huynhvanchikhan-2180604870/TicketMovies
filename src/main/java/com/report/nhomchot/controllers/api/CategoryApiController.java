@@ -110,7 +110,7 @@ public class CategoryApiController {
     }
 
     @RequestMapping(value = "/get-all-categories", method=RequestMethod.GET)
-    public ResponseEntity<Object> getMovieAll() {
+    public ResponseEntity<Object> getCategories() {
         
         return ResponseHandler.responseBuilder("Success", HttpStatus.OK, categoryService.getAllCategory());
     }

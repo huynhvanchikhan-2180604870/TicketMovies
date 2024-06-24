@@ -3,8 +3,13 @@ package com.report.nhomchot.services;
 import com.report.nhomchot.entities.Movie;
 import com.report.nhomchot.entities.ShowTime;
 import com.report.nhomchot.repositories.IShowTimeRepository;
+import com.report.nhomchot.repositories.repo.MovieRepository;
+import com.report.nhomchot.repositories.repo.ShowTimeRepository;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +25,10 @@ public class ShowTimeService {
 
     public List<ShowTime> getAllShowTime(){
         return showTimeRepository.findAll();
+    }
+    public Page<ShowTime> getAllShowTime(String name, int page, int size, String sortName, String sortDirect){
+        Pageable pageable = PageRequest.of(page, size);
+        return showTimeRepository.findAll(ShowTimeRepository.search(name, sortName, sortDirect), pageable);
     }
 
     public Optional<ShowTime> getShowTimeById(UUID id){

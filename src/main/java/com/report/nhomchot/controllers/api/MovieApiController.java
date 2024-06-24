@@ -68,6 +68,11 @@ public class MovieApiController {
         }
     }
 
+    @RequestMapping(value = "/get-all", method = RequestMethod.GET)
+    public ResponseEntity<Object> getAll(){
+        return ResponseHandler.responseBuilder("Get data success", HttpStatus.OK, movieService.getAllMovies());
+    }
+
     @RequestMapping(value = "/get-movie-byid/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getMovieById(@PathVariable UUID id) {
         Movie movie = movieService.getMovieById(id).orElseThrow(() -> new IllegalStateException("Movie with ID " +
