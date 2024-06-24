@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Theater {
     @Id
     private UUID id;
+    private String name;
     private UUID cinema_id;
     private Integer seating_capacity;
 }

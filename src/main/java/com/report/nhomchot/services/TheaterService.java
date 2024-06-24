@@ -1,8 +1,14 @@
 package com.report.nhomchot.services;
 
+import com.report.nhomchot.entities.Category;
 import com.report.nhomchot.entities.Theater;
 import com.report.nhomchot.repositories.ITheaterRepository;
+import com.report.nhomchot.repositories.repo.CategoryRepository;
+import com.report.nhomchot.repositories.repo.TheaterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +26,11 @@ public class TheaterService {
         return theaterRepository.findAll();
     }
 
+    public Page<Theater> getAllTheater(String name, int page, int size, String sortName, String sortDirect){
+        Pageable pageable = PageRequest.of(page, size);
+        return theaterRepository.findAll(TheaterRepository.search(name, sortName, sortDirect), pageable);
+    }
+
     public Theater addTheater(Theater theater){
         return theaterRepository.save(theater);
     }
@@ -33,6 +44,7 @@ public class TheaterService {
                 .orElseThrow(() -> new IllegalStateException("theater with ID " +
                         theater.getId() + " does not exist."));
         existingTheater.setCinema_id(theater.getCinema_id());
+        existingTheater.setName(theater.getName());
         existingTheater.setSeating_capacity(theater.getSeating_capacity());
         return theaterRepository.save(existingTheater);
     }
@@ -42,5 +54,9 @@ public class TheaterService {
             throw new IllegalStateException("Theater with ID " + id + " does not exist.");
         }
         theaterRepository.deleteById(id);
+    }
+
+    public List<Theater> findAllByCinemaId(UUID cinemaId) {
+        return theaterRepository.findByCinemaId(cinemaId);
     }
 }

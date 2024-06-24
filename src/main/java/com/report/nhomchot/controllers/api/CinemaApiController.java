@@ -97,5 +97,8 @@ public class CinemaApiController {
         return ResponseHandler.responseBuilder("Updated successfully", HttpStatus.OK, cinemaService.getAllCinema());
     }
 
-
+    @RequestMapping(value = "/get-all-cinemas", method = RequestMethod.GET)
+    public ResponseEntity<Object> getCinemas() {
+        return ResponseHandler.responseBuilder("Success", HttpStatus.OK, cinemaService.getAllCinema());
+    }
 }

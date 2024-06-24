@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class TheaterModel {
     private UUID id;
+    private String name;
     private UUID cinema_id;
     private Integer seating_capacity;
 }
