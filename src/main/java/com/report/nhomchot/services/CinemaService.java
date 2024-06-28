@@ -1,7 +1,6 @@
 package com.report.nhomchot.services;
 
 import com.report.nhomchot.entities.Cinema;
-import com.report.nhomchot.models.CinemaModel;
 import com.report.nhomchot.repositories.ICinemaRepository;
 import com.report.nhomchot.repositories.repo.CinemaRepository;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -46,6 +45,7 @@ public class CinemaService {
         existingCinema.setName(cinema.getName());
         existingCinema.setLocation(cinema.getLocation());
         existingCinema.setTotal_theaters(cinema.getTotal_theaters());
+        existingCinema.setTheaters(cinema.getTheaters());
         return cinemaRepository.save(existingCinema);
     }
     public void deleteCinema(UUID id){

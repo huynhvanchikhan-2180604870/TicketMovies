@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout::head"></th:block>
+<body>
+<header>
+    <th:block th:replace="layout::nav"></th:block>
+    <div class="popular-movie-slider">
+
+        <img th:src="${showtime.movie.poster_url}" class="poster">
+
+        <div class="popular-movie-slider-content">
+            <p class="release" th:text="${showtime.movie.release_date}"></p>
+            <h2 class="movie-name" th:text="${showtime.movie.title}"></h2>
+            <ul class="category">
+                <li th:text="${showtime.movie.category.name}"></li>
+            </ul>
+            <p class="desc" th:text="${showtime.movie.description}" multiple=""></p>
+            <div class="movie-info">
+                <i class="fa fa-clock-o"> &nbsp;&nbsp;&nbsp;<span th:text="${showtime.movie.duration} + phút"></span></i>
+                <i class="fa fa-volume-up"> &nbsp;&nbsp;&nbsp;<span>Subtitles</span></i>
+                <i class="fa fa-circle"> &nbsp;&nbsp;&nbsp;<span>Đánh giá: <b>9.1/10</b></span></i>
+            </div>
+            <input th:value="${showtime.id}" type="text" id="id">
+            <div class="movie-btns">
+                <button><i class="fa fa-play"></i> &nbsp; Watch trailer</button>
+                <!-- Correctly integrating Thymeleaf with a JavaScript function call -->
+                <button class="read-more" onclick="showBooking()"> &nbsp; Đặt vé</button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</header>
+<section>
+    <!--    <div class="movie-ticket-book">-->
+    <!--        <div class="choose-date">-->
+    <!--            <p class="heading">-->
+    <!--                choose date:-->
+    <!--            </p>-->
+    <!--            <div class="wrapper">-->
+    <!--                <div class="carousel owl-carousel">-->
+
+    <!--                    <div class="card card-1">-->
+    <!--                        <p>JUN 1t</p>-->
+    <!--                        <p>MON</p>-->
+    <!--                    </div>-->
+    <!--                    <div class="card card-2">-->
+    <!--                        <p>JUN 2nd</p>-->
+    <!--                        <p>TUE</p>-->
+    <!--                    </div>-->
+    <!--                    <div class="card card-3">-->
+    <!--                        <p>JUN 3nd</p>-->
+    <!--                        <p>wed</p>-->
+    <!--                    </div>-->
+    <!--                    <div class="card card-4">-->
+    <!--                        <p>JUN 4nd</p>-->
+    <!--                        <p>thu</p>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="marker"></div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="choose-time">-->
+    <!--            <p class="heading">-->
+    <!--                avalible times:-->
+    <!--            </p>-->
+    <!--            <div class="wrapper">-->
+    <!--                <div class="carousel owl-carousel">-->
+
+    <!--                    <div class="card card-1">-->
+    <!--                        <p>3D</p>-->
+    <!--                        <p>14:45</p>-->
+    <!--                    </div>-->
+    <!--                    <div class="card card-2">-->
+    <!--                        <p>3D</p>-->
+    <!--                        <p>11:45</p>-->
+    <!--                    </div>-->
+    <!--                    <div class="card card-3">-->
+    <!--                        <p>2D</p>-->
+    <!--                        <p>12:15</p>-->
+    <!--                    </div>-->
+    <!--                    <div class="card card-4">-->
+    <!--                        <p>3D</p>-->
+    <!--                        <p>13:00</p>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="marker"></div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <button>Buy ticket</button>-->
+    <!--    </div>-->
+    <!--    &lt;!&ndash;-movie-ticket-book&ndash;&gt;-->
+    <!--    <div class="filter-search-box" >-->
+    <!--        <div class="filters-box">-->
+
+    <!--            <div class="all-filters filters">-->
+    <!--                All formats <i class="fa fa-angle-down"></i>-->
+    <!--            </div>-->
+
+    <!--            <div class="date-filters filters">-->
+    <!--                By Date <i class="fa fa-angle-down"></i>-->
+    <!--            </div>-->
+
+    <!--            <div class="category-filters filters">-->
+    <!--                By category <i class="fa fa-angle-down"></i>-->
+    <!--            </div>-->
+
+    <!--            <div class="category-filters filters">-->
+    <!--                Coming soon-->
+    <!--            </div>-->
+
+    <!--        </div>-->
+
+    <!--        <div class="search-filters">-->
+    <!--            <input type="text" placeholder="Search by name...">-->
+    <!--            <i class="fa fa-search"></i>-->
+    <!--        </div>-->
+
+    <!--        <div class="search-bar">-->
+    <!--            <div class="bar"></div>-->
+    <!--        </div>-->
+
+    <!--    </div>-->
+    <!----filter-search-box---->
+
+    <div class="movie-card-section" id="box">
+        <div class="row">
+            <!-- Each movie card -->
+            <div class="col-12 mb-3">
+
+            </div>
+            <!-- Repeat for other movies -->
+        </div>
+    </div>
+    <!---movie-card--->
+
+    <div class="show">
+        <div class="show-bar">
+            <div class="bar"></div>
+        </div>
+        <button>Show more</button>
+    </div>
+    <!---bar--->
+</section>
+<th:block th:replace="layout::footer"></th:block>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/show-showtime.js"></script>
+<script src="/js/site.js"></script>
+
+<script>
+    function showBooking() {
+        const id = document.getElementById("id").value;
+        window.location.href = `/showtimes/booking/` + id;
+    }
+</script>
+</body>
+</html>

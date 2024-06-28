@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.report.nhomchot.dto.CategoryDTO;
+import com.report.nhomchot.models.FilterOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.report.nhomchot.entities.Category;
-import com.report.nhomchot.models.CategoryModel;
-import com.report.nhomchot.models.FilterOption;
 import com.report.nhomchot.response.ResponseHandler;
 import com.report.nhomchot.services.CategoryService;
 import com.report.nhomchot.utils.Util;
@@ -50,7 +50,6 @@ public class CategoryApiController {
             HttpServletRequest request) {
         Map<String, Object> result = new HashMap<>();
         try {
-
             FilterOption filterOption = Util.getFilterOption(request);
             int page = filterOption.getiDisplayStart() / filterOption.getiDisplayLength();
             Page<Category> categoryPage = categoryService.getAllCategory(name, page, filterOption.getiDisplayLength(),
@@ -77,7 +76,7 @@ public class CategoryApiController {
     }
 
     @RequestMapping(value = "/set-category", method = RequestMethod.POST)
-    public ResponseEntity<Object> setCategory(@RequestBody CategoryModel model){
+    public ResponseEntity<Object> setCategory(@RequestBody CategoryDTO model){
         Category category = new Category();
         category.setId(UUID.randomUUID());
         category.setAge_accept(model.getAge_accept());
@@ -87,7 +86,7 @@ public class CategoryApiController {
     }
 
     @RequestMapping(value = "/update-category/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Object> updateCategory(@PathVariable UUID id, @RequestBody CategoryModel model,
+    public ResponseEntity<Object> updateCategory(@PathVariable UUID id, @RequestBody CategoryDTO model,
                                                BindingResult result) {
         Category category = categoryService.getCategoryById(id).orElseThrow(() -> new IllegalStateException("Cinema with ID " +
                 id + " does not exist."));
@@ -111,7 +110,6 @@ public class CategoryApiController {
 
     @RequestMapping(value = "/get-all-categories", method=RequestMethod.GET)
     public ResponseEntity<Object> getCategories() {
-        
         return ResponseHandler.responseBuilder("Success", HttpStatus.OK, categoryService.getAllCategory());
     }
     

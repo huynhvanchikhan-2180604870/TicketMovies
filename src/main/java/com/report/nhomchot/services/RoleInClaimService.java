@@ -21,18 +21,18 @@ public class RoleInClaimService {
         return roleInClaimRepository.findAll();
     }
 
-    public List<RoleInClaim> getRoleInClaimById(UUID id){
-        return roleInClaimRepository.findByRole(id);
-    }
+//    public List<RoleInClaim> getRoleInClaimById(UUID id){
+//        return roleInClaimRepository.findByRole(id);
+//    }
 
     public RoleInClaim addRoleInClaim(RoleInClaim roleInClaim){
         return roleInClaimRepository.save(roleInClaim);
     }
 
-    public void deleteRoleInClaim(UUID id){
-        if (!roleInClaimRepository.existsById(id)) {
-            throw new IllegalStateException("Id with ID " + id + " does not exist.");
-        }
-        roleInClaimRepository.deleteById(id);
-    }
+//    public void deleteRoleInClaim(UUID id){
+//        if (!roleInClaimRepository.existsById(id)) {
+//            throw new IllegalStateException("Id with ID " + id + " does not exist.");
+//        }
+//        roleInClaimRepository.deleteById(id);
+//    }
 }

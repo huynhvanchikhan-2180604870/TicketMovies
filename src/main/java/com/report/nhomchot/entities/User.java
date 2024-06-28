@@ -6,6 +6,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -24,4 +25,7 @@ public class User {
     private String email;
     private String phone;
     private Integer age;
+    @OneToMany(mappedBy = "user")
+    private Set<UserInRole> userRoles;
+
 }

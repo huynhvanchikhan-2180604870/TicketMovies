@@ -1,13 +1,11 @@
 package com.report.nhomchot.controllers.api;
 
-import com.report.nhomchot.entities.Category;
-import com.report.nhomchot.entities.Movie;
+import com.report.nhomchot.dto.TheaterDTO;
+import com.report.nhomchot.entities.Cinema;
 import com.report.nhomchot.entities.Theater;
-import com.report.nhomchot.models.CategoryModel;
 import com.report.nhomchot.models.FilterOption;
-import com.report.nhomchot.models.MovieModel;
-import com.report.nhomchot.models.TheaterModel;
 import com.report.nhomchot.response.ResponseHandler;
+import com.report.nhomchot.services.CinemaService;
 import com.report.nhomchot.services.TheaterService;
 import com.report.nhomchot.utils.Util;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +26,8 @@ import java.util.UUID;
 public class TheaterApiController {
     @Autowired
     private TheaterService theaterService;
-
+    @Autowired
+    private CinemaService cinemaService;
     public TheaterApiController() {
     }
 
@@ -65,11 +64,12 @@ public class TheaterApiController {
     }
 
     @RequestMapping(value = "set-theater", method = RequestMethod.POST)
-    public ResponseEntity<Object> setTheater(@RequestBody TheaterModel model) {
+    public ResponseEntity<Object> setTheater(@RequestBody TheaterDTO model) {
         Theater theater = new Theater();
         theater.setId(UUID.randomUUID());
         theater.setName(model.getName());
-        theater.setCinema_id(model.getCinema_id());
+        Cinema cinema = cinemaService.getCinemaById(model.getCinema_id()).orElseThrow();
+        theater.setCinema(cinema);
         theater.setSeating_capacity(model.getSeating_capacity());
         theaterService.addTheater(theater);
         return ResponseHandler.responseBuilder("success",
@@ -79,11 +79,12 @@ public class TheaterApiController {
     }
 
     @RequestMapping(value = "/update-theater/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Object> updateTheater(@PathVariable UUID id, @RequestBody TheaterModel model,
+    public ResponseEntity<Object> updateTheater(@PathVariable UUID id, @RequestBody TheaterDTO model,
                                                  BindingResult result) {
         Theater theater = theaterService.getTheaterById(id).orElseThrow(() -> new IllegalStateException("Theater with ID " +
                 id + " does not exist."));
-        theater.setCinema_id(model.getCinema_id());
+        Cinema cinema = cinemaService.getCinemaById(model.getCinema_id()).orElseThrow();
+        theater.setCinema(cinema);
         theater.setName(model.getName());
         theater.setSeating_capacity(model.getSeating_capacity());
         theaterService.updateTheater(theater);
@@ -102,8 +103,8 @@ public class TheaterApiController {
         return ResponseHandler.responseBuilder("Updated successfully", HttpStatus.OK, theaterService.getAllTheater());
     }
 
-    @RequestMapping(value = "/get-all", method = RequestMethod.GET)
-    public ResponseEntity<Object> getAllTheater(){
-        return ResponseHandler.responseBuilder("Get data success!", HttpStatus.OK, theaterService.getAllTheater());
+    @RequestMapping(value = "/get-all/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Object> getAllTheater(@PathVariable UUID id){
+        return ResponseHandler.responseBuilder("Get data success!", HttpStatus.OK, theaterService.findAllByCinemaId(id));
     }
 }

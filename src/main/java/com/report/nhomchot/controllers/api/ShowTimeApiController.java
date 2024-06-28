@@ -1,13 +1,12 @@
 package com.report.nhomchot.controllers.api;
 
+import com.report.nhomchot.dto.ShowTimeDTO;
 import com.report.nhomchot.entities.Movie;
 import com.report.nhomchot.entities.ShowTime;
 import com.report.nhomchot.entities.Theater;
 import com.report.nhomchot.models.FilterOption;
-import com.report.nhomchot.models.MovieModel;
-import com.report.nhomchot.models.ShowTimeModel;
-import com.report.nhomchot.models.TheaterModel;
 import com.report.nhomchot.response.ResponseHandler;
+import com.report.nhomchot.services.MovieService;
 import com.report.nhomchot.services.ShowTimeService;
 import com.report.nhomchot.services.TheaterService;
 import com.report.nhomchot.utils.Util;
@@ -31,6 +30,8 @@ public class ShowTimeApiController {
     private ShowTimeService showTimeService;
     @Autowired
     private TheaterService theaterService;
+    @Autowired
+    private MovieService movieService;
     public ShowTimeApiController() {
     }
 
@@ -67,14 +68,18 @@ public class ShowTimeApiController {
     }
 
     @RequestMapping(value = "set-showtime", method = RequestMethod.POST)
-    public ResponseEntity<Object> setShowTime(@RequestBody ShowTimeModel model) {
+    public ResponseEntity<Object> setShowTime(@RequestBody ShowTimeDTO model) {
         ShowTime showtime = new ShowTime();
         showtime.setId(UUID.randomUUID());
-        showtime.setTheater_id(model.getTheater_id());
+
+        Theater theater = theaterService.getTheaterById(model.getTheater_id()).orElseThrow();
+        showtime.setTheater(theater);
         showtime.setStartTime(model.getStartTime());
         showtime.setEndTime(model.getEndTime());
         showtime.setPrice(model.getPrice());
-        showtime.setMovie_id(model.getMovie_id());
+
+        Movie movie = movieService.getMovieById(model.getMovie_id()).orElseThrow();
+        showtime.setMovie(movie);
         showTimeService.addShowTime(showtime);
         return ResponseHandler.responseBuilder("success",
                 HttpStatus.OK,
@@ -83,12 +88,14 @@ public class ShowTimeApiController {
     }
 
     @RequestMapping(value = "/update-showtime/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Object> updateShowTime(@PathVariable UUID id, @RequestBody ShowTimeModel model,
+    public ResponseEntity<Object> updateShowTime(@PathVariable UUID id, @RequestBody ShowTimeDTO model,
                                                 BindingResult result) {
         ShowTime showTime = showTimeService.getShowTimeById(id).orElseThrow(() -> new IllegalStateException("Theater with ID " +
                 id + " does not exist."));
-        showTime.setMovie_id(model.getMovie_id());
-        showTime.setTheater_id(model.getTheater_id());
+        Movie movie = movieService.getMovieById(model.getMovie_id()).orElseThrow();
+        showTime.setMovie(movie);
+        Theater theater = theaterService.getTheaterById(model.getTheater_id()).orElseThrow();
+        showTime.setTheater(theater);
         showTime.setStartTime(model.getStartTime());
         showTime.setEndTime(model.getEndTime());
         showTime.setPrice(model.getPrice());
@@ -112,11 +119,8 @@ public class ShowTimeApiController {
     public ResponseEntity<Object> getAllTheaters(@RequestParam(required = false) UUID cinemaId) {
         try {
             List<Theater> theaters;
-            if (cinemaId != null) {
-                theaters = theaterService.findAllByCinemaId(cinemaId); // Implement this method in your service
-            } else {
+
                 theaters = theaterService.getAllTheater(); // General method to get all theaters
-            }
             return ResponseHandler.responseBuilder("Theaters fetched successfully", HttpStatus.OK, theaters);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(

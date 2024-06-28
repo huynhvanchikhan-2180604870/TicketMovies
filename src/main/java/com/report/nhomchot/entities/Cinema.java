@@ -2,9 +2,11 @@ package com.report.nhomchot.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -20,4 +22,7 @@ public class Cinema {
     private String name;
     private String location;
     private Integer total_theaters;
+    @OneToMany(mappedBy = "cinema")
+    private Set<Theater> theaters;
+
 }

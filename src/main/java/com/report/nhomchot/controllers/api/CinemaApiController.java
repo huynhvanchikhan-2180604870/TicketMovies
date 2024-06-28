@@ -1,7 +1,7 @@
 package com.report.nhomchot.controllers.api;
 
+import com.report.nhomchot.dto.CinemaDTO;
 import com.report.nhomchot.entities.Cinema;
-import com.report.nhomchot.models.CinemaModel;
 import com.report.nhomchot.models.FilterOption;
 import com.report.nhomchot.response.ResponseHandler;
 import com.report.nhomchot.services.CinemaService;
@@ -60,7 +60,7 @@ public class CinemaApiController {
     }
 
     @RequestMapping(value = "/set-cinema", method = RequestMethod.POST)
-    public ResponseEntity<Object> setCinema(@RequestBody CinemaModel model) {
+    public ResponseEntity<Object> setCinema(@RequestBody CinemaDTO model) {
         Cinema cinema = new Cinema();
         cinema.setId(UUID.randomUUID());
         cinema.setName(model.getName());
@@ -74,7 +74,7 @@ public class CinemaApiController {
     }
 
     @RequestMapping(value = "/update-cinema/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Object> updateCinema(@PathVariable UUID id, @RequestBody CinemaModel model,
+    public ResponseEntity<Object> updateCinema(@PathVariable UUID id, @RequestBody CinemaDTO model,
                                                 BindingResult result) {
         Cinema cinema = cinemaService.getCinemaById(id).orElseThrow(() -> new IllegalStateException("Cinema with ID " +
                 id + " does not exist."));

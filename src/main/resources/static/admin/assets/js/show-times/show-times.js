@@ -1,34 +1,3 @@
-var theaters = {};
-$.getJSON('/api/theaters/get-all', function (response) {
-    // Kiểm tra phản hồi từ API có thành công và có dữ liệu không
-    if (response.httpStatus === "OK" && Array.isArray(response.data)) {
-        // Duyệt qua mảng dữ liệu và gán tên danh mục vào đối tượng categories
-        response.data.forEach(function (theater) {
-            theaters[theater.id] = theater.name;
-        });
-        console.log("response: ", response.data)
-    } else {
-        // Ghi log lỗi nếu dữ liệu không hợp lệ hoặc không có dữ liệu
-        console.error('Invalid or no data');
-    }
-});
-
-var movies = {};
-$.getJSON('/api/movies/get-all', function (response) {
-    // Kiểm tra phản hồi từ API có thành công và có dữ liệu không
-    if (response.httpStatus === "OK" && Array.isArray(response.data)) {
-        // Duyệt qua mảng dữ liệu và gán tên danh mục vào đối tượng categories
-        response.data.forEach(function (movie) {
-            movies[movie.id] = movie.title;
-        });
-        console.log("response: ", response.data)
-    } else {
-        // Ghi log lỗi nếu dữ liệu không hợp lệ hoặc không có dữ liệu
-        console.error('Invalid or no data');
-    }
-});
-
-
 var gird;
 gird = $('#example').DataTable({
     serverSide: true,
@@ -48,14 +17,10 @@ gird = $('#example').DataTable({
     columns: [
         {data: 'id'},
         {
-            data: 'theater_id', render: function (data, type, row) {
-                return theaters[data] || 'Unknown theaters'; // Sử dụng dữ liệu đã tải để hiển thị tên danh mục
-            }
+            data: 'theater.name'
         },
         {
-            data: 'movie_id', render: function (data, type, row) {
-                return movies[data] || 'Unknown movies'; // Sử dụng dữ liệu đã tải để hiển thị tên danh mục
-            }
+            data: 'movie.title'
         },
         {
             data: 'startTime', render: function (data, type, full) {
@@ -146,15 +111,16 @@ async function loadMovie(selectID) {
 async function loadTheater(idSelect, cinemaID) {
     try {
         let response = await $.ajax({
-            url: `/api/theaters/get-all?cinemaId=${cinemaID}`, // Pass the cinemaID to your API
+            url: `/api/theaters/get-all/` + cinemaID, // Pass the cinemaID to your API
             method: 'GET'
         });
+        console.log("theater data: ", response.data);
         var select = $(idSelect);
         select.empty().append('<option value="">Chọn Theater</option>');
 
         if (response.httpStatus === "OK" && response.data) {
             response.data.forEach(function (theater) {
-                if (theater.cinema_id === cinemaID) { // Correct the variable name here
+                if (theater.cinema.id === cinemaID) { // Correct the variable name here
                     select.append($('<option>', {
                         value: theater.id,
                         text: theater.name

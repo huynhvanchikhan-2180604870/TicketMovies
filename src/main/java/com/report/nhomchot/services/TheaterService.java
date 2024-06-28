@@ -43,9 +43,11 @@ public class TheaterService {
         Theater existingTheater = theaterRepository.findById(theater.getId())
                 .orElseThrow(() -> new IllegalStateException("theater with ID " +
                         theater.getId() + " does not exist."));
-        existingTheater.setCinema_id(theater.getCinema_id());
+        existingTheater.setCinema(theater.getCinema());
         existingTheater.setName(theater.getName());
         existingTheater.setSeating_capacity(theater.getSeating_capacity());
+        existingTheater.setSeats(theater.getSeats());
+        existingTheater.setShowtimes(theater.getShowtimes());
         return theaterRepository.save(existingTheater);
     }
 

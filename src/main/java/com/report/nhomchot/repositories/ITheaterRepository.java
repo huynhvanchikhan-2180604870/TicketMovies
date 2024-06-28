@@ -12,6 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface ITheaterRepository extends JpaRepository<Theater, UUID>, JpaSpecificationExecutor<Theater> {
-    @Query("SELECT t FROM Theater t WHERE t.cinema_id = :cinemaId")
-    List<Theater> findByCinemaId(@Param("cinemaId") UUID cinemaId);
+    @Query("select t from Theater t where t.cinema.id = :cinemaId")
+    List<Theater> findByCinemaId(UUID cinemaId);
 }

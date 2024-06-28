@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -23,7 +24,13 @@ public class Movie {
     private Integer duration;
     private LocalDate release_date;
     private String poster_url;
-    private UUID category_id;
     private String director;
     private String authors;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToMany(mappedBy = "movie")
+    private Set<ShowTime> showtimes;
 }
