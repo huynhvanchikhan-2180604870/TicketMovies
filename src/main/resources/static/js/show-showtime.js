@@ -16,21 +16,36 @@ async function ShowTimeInBox() {
 
         let stringHTML = "";
         movies.forEach((movie, index) => {
+            let movieShowtimes = showtimes.filter(st => st.movie_id === movie.id);
+
+            // Format showtimes into a string with "3D" labels and full date in Vietnamese
+            let timesHtml = movieShowtimes.map(st => {
+                let startTime = new Date(st.startTime);
+                let formattedDate = startTime.toLocaleDateString('vi-VN', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                let formattedTime = `${startTime.getHours()}:${startTime.getMinutes().toString().padStart(2, '0')}`;
+                return `<span>${formattedDate}, ${formattedTime}<span class="d3">3D</span></span>`;
+            }).join(' ');
+
             stringHTML += `
                 <div class="card">
-                    <img src="${movie.poster_url}">
-                    <div class="card-content">
-                        <p class="movie-name">${movie.title}</p>
-                        <div class="movie-info">
-                            <p class="time">11:30 <span>14:45<span class="d3">3D</span> 16:05<span class="d3">3D</span></span> 18:40 21:00 23:15</p>
-                        </div>
+                    <img src="${movie.poster_url}" class="card-img-top" alt="Movie Poster">
+                    <div class="card-body">
+                        <h3 class="card-title">${movie.title}</h3>
+                        <p class="time" style="font-size: 12px; margin-top: 5px">${timesHtml}</p>
                     </div>
                 </div>
+               
             `;
         });
+
         document.getElementById("box").innerHTML = stringHTML;
     } catch (error) {
-        console.error('Error fetching showstime:', error);
+        console.error('Error fetching showtimes:', error);
         alert("Failed to fetch showtimes: " + error.message);
     }
 }
