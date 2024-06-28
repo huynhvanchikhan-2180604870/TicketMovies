@@ -1,16 +1,15 @@
-package com.report.nhomchot.models;
+package com.report.nhomchot.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
+
 @Setter
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class CinemaModel {
+@Data
+public class CinemaDTO {
     private UUID id;
     private String name;
     private String location;

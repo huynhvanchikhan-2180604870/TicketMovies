@@ -2,7 +2,7 @@ $(document).ready(function() {
     loadCinemas('newShowTime-CinemaID'); // Load cinemas initially when the document is ready
     loadMovie('newShowTime-MovieID');
     // Event listener for changing the cinema selection
-    $('#ShowTime-CinemaID').change(function() {
+    $('#newShowTime-CinemaID').change(function() {
         var cinemaID = $(this).val();
         console.log("Cinema ID: ", cinemaID);
         if (cinemaID) {

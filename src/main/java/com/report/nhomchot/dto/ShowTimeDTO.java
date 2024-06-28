@@ -1,17 +1,16 @@
-package com.report.nhomchot.models;
+package com.report.nhomchot.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 @Setter
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ShowTimeModel {
+@Data
+public class ShowTimeDTO {
     private UUID id;
     private UUID theater_id;
     private UUID movie_id;

@@ -50,6 +50,8 @@ public class MovieService {
         existingMovie.setRelease_date(movie.getRelease_date());
         existingMovie.setDirector(movie.getDirector());
         existingMovie.setAuthors(movie.getAuthors());
+        existingMovie.setCategory(movie.getCategory());
+        existingMovie.setShowtimes(movie.getShowtimes());
         return movieRepository.save(existingMovie);
     }
     public void deleteCinema(UUID id){

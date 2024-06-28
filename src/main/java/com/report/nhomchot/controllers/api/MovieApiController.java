@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.report.nhomchot.dto.MovieDTO;
 import com.report.nhomchot.entities.Category;
-import com.report.nhomchot.models.CategoryModel;
+import com.report.nhomchot.models.FilterOption;
+import com.report.nhomchot.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.report.nhomchot.entities.Movie;
-import com.report.nhomchot.models.FilterOption;
-import com.report.nhomchot.models.MovieModel;
 import com.report.nhomchot.response.ResponseHandler;
 import com.report.nhomchot.services.MovieService;
 import com.report.nhomchot.utils.Util;
@@ -32,6 +32,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class MovieApiController {
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private CategoryService categoryService;
 
     public MovieApiController() {
     }
@@ -81,7 +83,7 @@ public class MovieApiController {
     }
 
     @RequestMapping(value = "set-movie", method = RequestMethod.POST)
-    public ResponseEntity<Object> setMovie(@RequestBody MovieModel model) {
+    public ResponseEntity<Object> setMovie(@RequestBody MovieDTO model) {
         Movie movie = new Movie();
         movie.setId(UUID.randomUUID());
         movie.setTitle(model.getTitle());
@@ -89,7 +91,9 @@ public class MovieApiController {
         movie.setDescription(model.getDescription());
         movie.setRelease_date(model.getRelease_date());
         movie.setPoster_url(model.getPoster_url());
-        movie.setCategory_id(model.getCategory_id());
+        // Convert category ID to Category object
+        Category category = categoryService.getCategoryById(model.getCategory_id()).orElseThrow();
+        movie.setCategory(category);
         movie.setDirector(model.getDirector());
         movie.setAuthors(model.getAuthors());
         movieService.addMovie(movie);
@@ -101,7 +105,7 @@ public class MovieApiController {
     }
 
     @RequestMapping(value = "/update-movie/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Object> updateCategory(@PathVariable UUID id, @RequestBody MovieModel model,
+    public ResponseEntity<Object> updateCategory(@PathVariable UUID id, @RequestBody MovieDTO model,
                                                  BindingResult result) {
         Movie movie = movieService.getMovieById(id).orElseThrow(() -> new IllegalStateException("Cinema with ID " +
                 id + " does not exist."));
@@ -110,7 +114,9 @@ public class MovieApiController {
         movie.setDuration(model.getDuration());
         movie.setRelease_date(model.getRelease_date());
         movie.setPoster_url(model.getPoster_url());
-        movie.setCategory_id(model.getCategory_id());
+        // Convert category ID to Category object
+        Category category = categoryService.getCategoryById(model.getCategory_id()).orElseThrow();
+        movie.setCategory(category);
         movie.setDirector(model.getDirector());
         movie.setAuthors(model.getAuthors());
         movieService.updateMovie(movie);

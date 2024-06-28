@@ -3,6 +3,7 @@ package com.report.nhomchot.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 @Setter
 @Getter
@@ -16,5 +17,6 @@ public class Category {
     private UUID id;
     private String name;
     private int age_accept;
-
+    @OneToMany(mappedBy = "category")
+    private Set<Movie> movies;
 }

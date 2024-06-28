@@ -1,16 +1,3 @@
-var categories = {};
-$.getJSON('/api/categories/get-all-categories', function(response) {
-    // Kiểm tra phản hồi từ API có thành công và có dữ liệu không
-    if (response.httpStatus === "OK" && Array.isArray(response.data)) {
-        // Duyệt qua mảng dữ liệu và gán tên danh mục vào đối tượng categories
-        response.data.forEach(function(category) {
-            categories[category.id] = category.name;
-        });
-    } else {
-        // Ghi log lỗi nếu dữ liệu không hợp lệ hoặc không có dữ liệu
-        console.error('Invalid or no data');
-    }
-});
 
 var gird;
 gird = $('#example').DataTable({
@@ -49,9 +36,7 @@ gird = $('#example').DataTable({
                 return 'No image available';
             }
         }},
-        { data: 'category_id', render: function(data, type, row) {
-            return categories[data] || 'Unknown Category'; // Sử dụng dữ liệu đã tải để hiển thị tên danh mục
-        }},
+        { data: 'category.name'},
         {
             mData: null, bSortable: false, mRender: function(data, type, full) {
 

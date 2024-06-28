@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -16,9 +17,17 @@ import java.util.UUID;
 public class ShowTime {
     @Id
     private UUID id;
-    private UUID theater_id;
-    private UUID movie_id;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Integer price;
+    @ManyToOne
+    @JoinColumn(name = "theater_id")
+    public Theater theater;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    public Movie movie;
+    public LocalDateTime startTime;
+    public LocalDateTime endTime;
+    public Integer price;
+
+    @OneToMany(mappedBy = "showtime")
+    public Set<Ticket> tickets;
 }

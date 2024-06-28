@@ -43,12 +43,12 @@ public class ShowTimeService {
         ShowTime existingShowTime = showTimeRepository.findById(showTime.getId())
                 .orElseThrow(() -> new IllegalStateException("showTime with ID " +
                         showTime.getId() + " does not exist."));
-        existingShowTime.setMovie_id(showTime.getMovie_id());
+        existingShowTime.setTickets(showTime.getTickets());
         existingShowTime.setPrice(showTime.getPrice());
         existingShowTime.setStartTime(showTime.getStartTime());
         existingShowTime.setEndTime(showTime.getEndTime());
-        existingShowTime.setTheater_id(showTime.getTheater_id());
-
+        existingShowTime.setTheater(showTime.getTheater());
+        existingShowTime.setMovie(showTime.getMovie());
         return showTimeRepository.save(existingShowTime);
     }
     public void deleteCinema(UUID id){

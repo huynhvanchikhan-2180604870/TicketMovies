@@ -46,6 +46,7 @@ public class CategoryService {
                         category.getId() + " does not exist."));
         existingCategory.setAge_accept(category.getAge_accept());
         existingCategory.setName(category.getName());
+        existingCategory.setMovies(category.getMovies());
         return categoryRepository.save(existingCategory);
     }
 

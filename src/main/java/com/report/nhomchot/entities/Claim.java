@@ -1,11 +1,10 @@
 package com.report.nhomchot.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -18,6 +17,13 @@ import java.util.UUID;
 public class Claim {
     @Id
     private UUID id;
-    private String name; // Tên quyền
-    private String description; // Mô tả quyền
+    @Column(nullable = false)
+    private String claimType;
+
+    @Column(nullable = false)
+    private String claimValue;
+
+    @OneToMany(mappedBy = "claim")
+    private Set<RoleInClaim> roleClaims;
+
 }

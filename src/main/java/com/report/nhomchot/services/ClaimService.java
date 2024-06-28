@@ -34,8 +34,9 @@ public class ClaimService {
         Claim existingClaim = claimRepository.findById(claim.getId())
                 .orElseThrow(() -> new IllegalStateException("claim with ID " +
                         claim.getId() + " does not exist."));
-        existingClaim.setName(claim.getName());
-        existingClaim.setDescription(claim.getDescription());
+        existingClaim.setClaimType(claim.getClaimType());
+        existingClaim.setClaimValue(claim.getClaimValue());
+        existingClaim.setRoleClaims(claim.getRoleClaims());
         return claimRepository.save(existingClaim);
     }
     public void deleteClaim(UUID id){

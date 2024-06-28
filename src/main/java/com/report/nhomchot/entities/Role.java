@@ -1,9 +1,6 @@
 package com.report.nhomchot.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
@@ -19,5 +16,13 @@ import java.util.UUID;
 public class Role {
     @Id
     private UUID id;
-    private String name;
+    @Column(nullable = false)
+    private String roleName;
+
+    @OneToMany(mappedBy = "role")
+    private Set<UserInRole> userRoles;
+
+    @OneToMany(mappedBy = "role")
+    private Set<RoleInClaim> roleClaims;
+
 }

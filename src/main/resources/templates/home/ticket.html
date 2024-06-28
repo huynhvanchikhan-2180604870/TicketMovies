@@ -2,7 +2,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="layout::head"></th:block>
 <body>
-<th:block th:replace="layout::header"></th:block>
+<header>
+    <th:block th:replace="layout::nav"></th:block>
+    <div class="popular-movie-slider">
+
+        <img src="https://i.pinimg.com/564x/f7/c5/fe/f7c5feeab4c6a8e8d318731a86a9b3d1.jpg" class="poster">
+
+        <div class="popular-movie-slider-content">
+            <p class="release">2024</p>
+            <h2 class="movie-name">Doraemon</h2>
+            <ul class="category">
+                <p>Science fiction</p>
+                <li>drama</li>
+                <li>action</li>
+            </ul>
+            <p class="desc">The story revolves around the robot cat Doremon, from the 22nd century, sent back to the past to help Nobita Nobi - a lazy elementary school student and a servant. Doremon has a mythical bag containing many treasures with special uses, to help Nobita overcome troubles and improve his life.</p>
+
+            <div class="movie-info">
+                <i class="fa fa-clock-o"> &nbsp;&nbsp;&nbsp;<span>164 min.</span></i>
+                <i class="fa fa-volume-up"> &nbsp;&nbsp;&nbsp;<span>Subtitles</span></i>
+                <i class="fa fa-circle"> &nbsp;&nbsp;&nbsp;<span>Imdb: <b>9.1/10</b></span></i>
+            </div>
+
+            <div class="movie-btns">
+                <button><i class="fa fa-play"></i> &nbsp; Watch trailer</button>
+                <button class="read-more"><i class="fa fa-circle"></i> <i class="fa fa-circle"></i> <i class="fa fa-circle"></i>&nbsp; Read more</button>
+            </div>
+
+        </div>
+
+    </div>
+</header>
+
 <section>
 <!--    <div class="movie-ticket-book">-->
 <!--        <div class="choose-date">-->

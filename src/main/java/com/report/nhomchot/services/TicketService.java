@@ -1,5 +1,6 @@
 package com.report.nhomchot.services;
 
+import com.report.nhomchot.entities.Seat;
 import com.report.nhomchot.entities.Theater;
 import com.report.nhomchot.entities.Ticket;
 import com.report.nhomchot.repositories.ITicketRepository;
@@ -29,21 +30,26 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
-    public Ticket updateTicket(Ticket ticket){
-        Ticket existingTicket = ticketRepository.findById(ticket.getId())
-                .orElseThrow(() -> new IllegalStateException("ticket with ID " +
-                        ticket.getId() + " does not exist."));
-        existingTicket.setShowtime_id(ticket.getShowtime_id());
-        existingTicket.setUser_id(ticket.getShowtime_id());
-        existingTicket.setStatus(ticket.getStatus());
-        existingTicket.setSeatNumber(ticket.getSeatNumber());
-        return ticketRepository.save(existingTicket);
-    }
+//    public Ticket updateTicket(Ticket ticket){
+//        Ticket existingTicket = ticketRepository.findById(ticket.getId())
+//                .orElseThrow(() -> new IllegalStateException("ticket with ID " +
+//                        ticket.getId() + " does not exist."));
+//        existingTicket.setShowtime(ticket.getShowtime());
+//        existingTicket.setUser(ticket.getUser());
+//        existingTicket.setStatus(ticket.getStatus());
+//        existingTicket.setBookingTime(ticket.getBookingTime());
+//        existingTicket.setSeat(ticket.getSeat());
+//        return ticketRepository.save(existingTicket);
+//    }
 
     public void deleteTicket(UUID id){
         if (!ticketRepository.existsById(id)) {
             throw new IllegalStateException("Ticket with ID " + id + " does not exist.");
         }
         ticketRepository.deleteById(id);
+    }
+
+    public List<Seat>findTicketsByTheater_Id(UUID id){
+        return findTicketsByTheater_Id(id);
     }
 }
