@@ -19,10 +19,4 @@ public class Role {
     @Column(nullable = false)
     private String roleName;
 
-    @OneToMany(mappedBy = "role")
-    private Set<UserInRole> userRoles;
-
-    @OneToMany(mappedBy = "role")
-    private Set<RoleInClaim> roleClaims;
-
 }

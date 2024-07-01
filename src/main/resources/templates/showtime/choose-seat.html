@@ -32,8 +32,8 @@
                                         	<span class="name">
                                         		<span class="subname" th:text="${showtime.theater.name}"></span>
                                         	</span>
-                                    <p class="showtime" th:text="'Ngày chiếu: '+${showtime.startTime}"></p>
-                                    <p class="showtime" th:text="'Giờ chiếu: '+${showtime.endTime}"></p>
+                                    <p class="showtime" id="starttime" th:text="'Ngày chiếu: '+${showtime.startTime}"></p>
+                                    <p class="showtime" id="endtime" th:text="'Giờ chiếu: '+${showtime.endTime}"></p>
                                 </div>
                             </div>
                             <div class="timeKeepSlot">
@@ -82,9 +82,9 @@
                 <div class="checkout__form">
                     <div class="total__price"><span class="price" data-price="0">0₫</span></div>
                     <div class="film__info">
-                        <span class="film__age--C" th:text="${showtime.theater.name}"></span>
+                        <span class="film__age--C" th:text="${showtime.movie.category.age_accept}"></span>
                         <span class="film__name" th:text="${showtime.theater.name}"></span>
-                        <p class="film__detail" th:text="${showtime.startTime}+' - '+${showtime.startTime}"></p>
+                        <p class="film__detail" th:text="${showtime.startTime}+' - '+${showtime.endTime}"></p>
                         <p class="theater__name" th:text="${showtime.theater.cinema.name}"></p>
                         <p class="film__address" th:text="${showtime.theater.cinema.location}"></p>
                     </div>
@@ -195,6 +195,21 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src="/seat/js/fnmain.js"></script>
+<script>
+    function remainingTime() {
+        const today = new Date();
+        const dateSchedule = new Date(`[[${showtime.startTime}]] [[${showtime.endTime}]]`);
+        console.log("date: ", dateSchedule);
 
+        const seconds = Math.floor((dateSchedule - today) / 1000);
+        if (seconds > 0) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds - h * 3600 - m * 60;
+            return `${h} giờ ${m} phút ${s} giây `;
+        }
+        return null;
+    }
+</script>
 </body>
 </html>
