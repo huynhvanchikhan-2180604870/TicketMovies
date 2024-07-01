@@ -3,7 +3,9 @@ package com.report.nhomchot.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,8 +26,8 @@ public class ShowTime {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     public Movie movie;
-    public LocalDateTime startTime;
-    public LocalDateTime endTime;
+    public LocalDate startTime;
+    public LocalTime endTime;
     public Integer price;
 
     @OneToMany(mappedBy = "showtime")

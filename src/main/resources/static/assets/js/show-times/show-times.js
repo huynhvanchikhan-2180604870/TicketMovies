@@ -35,10 +35,10 @@ gird = $('#example').DataTable({
         {
             data: 'endTime', render: function (data, type, full) {
                 if (data) {
-                    // Đặt locale tiếng Việt và định dạng ngày giờ
-                    return moment(data).locale('vi').format('DD-MMM-YYYY (HH:mm)');
+                    // Định dạng chỉ giờ và phút, giả sử 'data' là chuỗi hợp lệ hoặc đối tượng LocalTime
+                    return moment(data, "HH:mm:ss").format('HH:mm:ss');
                 } else {
-                    return 'No release date';
+                    return 'No release time';
                 }
             }
         },

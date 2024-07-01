@@ -87,15 +87,4 @@ $("#notify-error").click(function () {
     window.location.href = '/';
 });
 
-function remainingTime() {
-    // const today = new Date();
-    // // const dateSchedule = new Date([[${showtime.startTime}]] + ' ' + [[${showtime.startTime}]]);
-    // const seconds = Math.floor((dateSchedule - today) / 1000);
-    // if (seconds > 0) {
-    //     const h = Math.floor(seconds / 3600);
-    //     const m = Math.floor((seconds % 3600) / 60);
-    //     const s = seconds - h * 3600 - m * 60;
-    //     return `${h} giờ ${m} phút ${s} giây `;
-    // }
-    // return null;
-}
+

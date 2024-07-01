@@ -1,9 +1,9 @@
-package com.report.nhomchot.services;
+package com.report.nhomchot.utils.service;
 
 import com.report.nhomchot.entities.Role;
 import com.report.nhomchot.entities.User;
-import com.report.nhomchot.repositories.IRoleRepository;
-import com.report.nhomchot.repositories.IUserRepository;
+import com.report.nhomchot.utils.repo.IRoleRepository;
+import com.report.nhomchot.utils.repo.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
