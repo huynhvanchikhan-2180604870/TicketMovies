@@ -19,4 +19,9 @@ public class HomeController {
     public String admin(){
         return "admin/index";
     }
+
+    @GetMapping("/403")
+    public String errorpage(){
+        return "home/403";
+    }
 }
