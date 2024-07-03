@@ -1,5 +1,6 @@
 package com.report.nhomchot.dto;
 
+import com.report.nhomchot.entities.ShowTime;
 import lombok.*;
 
 import java.util.Date;
@@ -14,4 +15,5 @@ public class TicketDTO {
     private String qrImageURL;
     private SeatDTO seat;
     private BillDTO bill;
+    private ShowTime showTime;
 }

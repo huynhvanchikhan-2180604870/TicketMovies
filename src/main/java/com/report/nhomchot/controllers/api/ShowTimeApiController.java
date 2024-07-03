@@ -9,6 +9,7 @@ import com.report.nhomchot.response.ResponseHandler;
 import com.report.nhomchot.services.MovieService;
 import com.report.nhomchot.services.ShowTimeService;
 import com.report.nhomchot.services.TheaterService;
+import com.report.nhomchot.utils.ResourceNotFoundException;
 import com.report.nhomchot.utils.Util;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +129,12 @@ public class ShowTimeApiController {
                     "message", "Internal server error: " + e.getMessage()
             ));
         }
+    }
+
+    @GetMapping("/get-by-id/{id}")
+    public ResponseEntity<ShowTimeDTO> getSchedule(@PathVariable UUID id) {
+        ShowTimeDTO showTimeDTO = showTimeService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ShowTime not found"));
+        return ResponseEntity.ok(showTimeDTO);
     }
 }

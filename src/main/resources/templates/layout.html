@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,8 +28,22 @@
             <li>tickets</li>
             <li>news</li>
             <li>contact</li>
-            <li><span>LinhDan <img src="/images/LinhDan.jpg"> <i class="fa fa-angle-down"></i></span></li>
-            <li><b>sign out</b></li>
+            <li>
+                <span >
+                    Xin chào,
+                    <a href="/ticket/history" sec:authentication="name" style="margin-right: 20px;">
+                        <img src="/images/LinhDan.jpg">
+                    </a>
+                </span>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+            <li sec:authorize="!isAuthenticated()">
+                <a href="/login">Login</a>
+            </li>
         </ul>
 
     </nav>

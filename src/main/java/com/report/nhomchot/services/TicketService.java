@@ -1,55 +1,71 @@
 package com.report.nhomchot.services;
 
+import com.report.nhomchot.dto.TicketDTO;
 import com.report.nhomchot.entities.Seat;
 import com.report.nhomchot.entities.Theater;
 import com.report.nhomchot.entities.Ticket;
 import com.report.nhomchot.repositories.ITicketRepository;
+import com.report.nhomchot.utils.repo.IGeneralService;
+import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-public class TicketService {
+public class TicketService implements IGeneralService<TicketDTO>, ITicketService {
     @Autowired
     private ITicketRepository ticketRepository;
-
-    public TicketService(){}
-
-    public List<Ticket> getAllTicket(){
-        return ticketRepository.findAll();
+    @Autowired
+    private ModelMapper modelMapper;
+    @Override
+    public List<TicketDTO> getTicketsByUserId(UUID userId) {
+        return ticketRepository.findTicketsByUserId(userId)
+                .stream().map(ticket -> modelMapper.map(ticket,TicketDTO.class))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<TicketDTO> getTicketsByBillId(UUID billId) {
+        return ticketRepository.findTicketsByBill_Id(billId)
+                .stream().map(ticket -> modelMapper.map(ticket,TicketDTO.class))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<TicketDTO> findAll() {
+        return ticketRepository.findAll()
+                .stream().map(ticket -> modelMapper.map(ticket,TicketDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public Optional<Ticket> getTicketById(UUID id){
-        return ticketRepository.findById(id);
+    @Override
+    public TicketDTO save(TicketDTO ticketDTO) {
+        Ticket ticket = modelMapper.map(ticketDTO, Ticket.class);
+        Ticket savedTicket = ticketRepository.save(ticket);
+        return modelMapper.map(savedTicket, TicketDTO.class);
     }
 
-    public Ticket addTicket(Ticket ticket){
-        return ticketRepository.save(ticket);
+    public List<Ticket> getTicketOfUser(UUID id){
+        return ticketRepository.findTicketsByUserId(id)
+                .stream().map(ticket -> modelMapper.map(ticket,Ticket.class))
+                .collect(Collectors.toList());
     }
 
-//    public Ticket updateTicket(Ticket ticket){
-//        Ticket existingTicket = ticketRepository.findById(ticket.getId())
-//                .orElseThrow(() -> new IllegalStateException("ticket with ID " +
-//                        ticket.getId() + " does not exist."));
-//        existingTicket.setShowtime(ticket.getShowtime());
-//        existingTicket.setUser(ticket.getUser());
-//        existingTicket.setStatus(ticket.getStatus());
-//        existingTicket.setBookingTime(ticket.getBookingTime());
-//        existingTicket.setSeat(ticket.getSeat());
-//        return ticketRepository.save(existingTicket);
-//    }
-
-    public void deleteTicket(UUID id){
-        if (!ticketRepository.existsById(id)) {
-            throw new IllegalStateException("Ticket with ID " + id + " does not exist.");
-        }
+    @Override
+    public void remove(UUID id) {
         ticketRepository.deleteById(id);
     }
 
-    public List<Seat>findTicketsByTheater_Id(UUID id){
-        return findTicketsByTheater_Id(id);
+
+    @Override
+    public Optional<TicketDTO> findById(UUID id) {
+        Optional<Ticket> ticket = ticketRepository.findById(id);
+        return ticket.map(t -> modelMapper.map(t, TicketDTO.class));
     }
+
+
+
 }

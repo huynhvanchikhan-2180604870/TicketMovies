@@ -22,7 +22,7 @@ async function ShowTimeInBox() {
                     <div class="card-content">
                         <p class="movie-name">${showtime.movie.title}</p>
                         <div class="movie-info">
-                            <p class="time">${startTime} - ${endTime}</p>
+                            <p class="time">${startTime} - ${showtime.endTime}</p>
                         </div>
                     </div>
                     <button class="detail-btn" onclick="showDetail('${showtime.id}')">Detail</button>

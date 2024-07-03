@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="layout-admin::head"></th:block>
+
+<body>
+  <th:block th:replace="layout-admin::header"></th:block>
+  <div class="container shadow mt-5">
+    <table class="table">
+      <thead>
+        <th>ID</th>
+        <th>USERNAME</th>
+        <th>Pass</th>
+        <th>Role</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td th:text="${user.id}"></td>
+          <td th:text="${user.username}"></td>
+          <td th:text="${user.password}"></td>
+          <td>
+            <ul>
+              <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+            </ul>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

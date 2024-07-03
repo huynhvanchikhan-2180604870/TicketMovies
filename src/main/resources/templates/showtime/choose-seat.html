@@ -35,6 +35,7 @@
                                     <p class="showtime" id="starttime" th:text="'Ngày chiếu: '+${showtime.startTime}"></p>
                                     <p class="showtime" id="endtime" th:text="'Giờ chiếu: '+${showtime.endTime}"></p>
                                 </div>
+                                <input th:value="${showtime.id}" id="showtime_id" hidden>
                             </div>
                             <div class="timeKeepSlot">
                                 <p class="title__text" style="font-size: 14px;">Đếm ngược kết thúc lịch chiếu</p><span
@@ -49,8 +50,8 @@
                                     <div class="slot__row">
                                         <i th:each="seat: ${seats}" class="fa fa-couch slot__item"
                                            th:classappend="${seat.isActive} ?
-                                                (${seat.isChecked} ? 'item--checked':
-                                                (${seat.isOccupied}==1 ? 'item--picked':
+                                                (${seat.isChecked} ? 'item--picked':
+                                                (${seat.isOccupied} ? 'item--checked':
                                                 (${seat.isVip} ? 'item--vip':''))):
                                                  'item--hiden'"
                                            th:data-seat="${seat.name}"
@@ -100,92 +101,21 @@
                             dụng
                         </button>
                     </div>
+
                     <div class="payForm"><a class="pay__link" href="/#"><span class="title__text">Hình thức thanh
                                         toán</span>
                         <p class="text__notification">Vui lòng chọn ghế để hiển thị phương thức thanh toán phù
                             hợp.</p>
                     </a></div>
+
+
                 </div>
                 <div class="textNotification text-center"><i class="fa fa-info-circle text-danger mr-1"></i><span
                         class="noti__text">Vé đã mua không thể đổi hoặc hoàn tiền Mã vé sẽ được gửi qua tin nhắn
                                 <span class="noti__link">ZMS</span> (tin nhắn Zalo) và <span
                             class="noti__link">Email</span>
                                 đã nhập. </span></div>
-                <div id="btnBook" class="btnBook" data-toggle="modal" data-target="#CreditModal">Thanh toán</div>
-                <div>
-                    <div class="CreditModal modal fade bd-example-modal-lg" id="CreditModal" tabindex="-1"
-                         role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Thanh toán</h5>
-                                    <button type="button" class="close"
-                                            data-dismiss="modal" aria-label="Close"><span
-                                            aria-hidden="true">×</span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="PaymentForm">
-                                        <div class="row">
-                                            <div class="credit-card col-md-6 col-sm-12 mb-2">
-                                                <div class="rccs">
-                                                    <div class="rccs__card rccs__card--unknown">
-                                                        <div class="rccs__card--front">
-                                                            <div class="rccs__card__background"></div>
-                                                            <div class="rccs__issuer"></div>
-                                                            <div class="rccs__cvc__front"></div>
-                                                            <div class="rccs__number">•••• •••• •••• ••••</div>
-                                                            <div class="rccs__name">YOUR NAME HERE</div>
-                                                            <div class="rccs__expiry">
-                                                                <div class="rccs__expiry__valid">valid thru</div>
-                                                                <div class="rccs__expiry__value">••/••</div>
-                                                            </div>
-                                                            <div class="rccs__chip"></div>
-                                                        </div>
-                                                        <div class="rccs__card--back">
-                                                            <div class="rccs__card__background"></div>
-                                                            <div class="rccs__stripe"></div>
-                                                            <div class="rccs__signature"></div>
-                                                            <div class="rccs__cvc"></div>
-                                                            <div class="rccs__issuer"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="info-card col-md-6 col-sm-12">
-                                                <form class="info-form" th:action="@{/booking}" method="post">
-                                                    <div class="textb"><input type="tel" name="number"
-                                                                              class="w-100">
-                                                        <div class="placeholder">Card Number</div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-6" style="padding-right: 0px;">
-                                                            <div class="textb"><input type="tel" name="expiry">
-                                                                <div class="placeholder">Valid</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="textb"><input type="tel" name="cvc">
-                                                                <div class="placeholder">CVC</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="textb"><input type="text" name="name">
-                                                        <div class="placeholder">Name</div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="btn-booking" type="button" class="btn-style draw-border">Đặt
-                                        vé
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <button id="btn-booking" class="btnBook" data-toggle="modal" data-target="#CreditModal" onclick="createBill('VNPAY')">Thanh toán</button>
             </div>
         </div>
     </div>
@@ -209,7 +139,110 @@
             return `${h} giờ ${m} phút ${s} giây `;
         }
         return null;
+    };
+    function loadUser(callback, username) {
+        console.log("username: ",username)
+        $.ajax({
+            type: "GET",
+            url: "/api/users/get-by-username/" + username,
+            success: function (user) {
+                console.log("User info:", user);
+                callback(null, user);
+            },
+            error: function (error) {
+                console.log("Error loading user info:", error);
+                callback(error, null);
+            }
+        });
+    };
+
+    function getCurrentUsername(callback) {
+        $.ajax({
+            type: "GET",
+            url: "/api/users/get-current-username",
+            success: function (username) {
+                console.log("Current username:", username);
+                callback(null, username);
+            },
+            error: function (error) {
+                console.log("Error getting current username:", error);
+                callback(error, null);
+            }
+        });
     }
+
+    $("#btn-booking-cod").click(function () {
+        createBill("COD");
+    });
+
+    $("#btn-booking-vnpay").click(function () {
+        createBill("VNPAY");
+    });
+
+    function createBill() {
+        if (dataParameter.length != 0) {
+            getCurrentUsername(function (error, currentUsername) {
+                if (error) {
+                    $("#text-error").html("Có lỗi xảy ra khi lấy username hiện tại.");
+                    $("#error").addClass("swal-overlay--show-modal");
+                    return;
+                }
+
+                console.log("Calling loadUser with username:", currentUsername);
+                let currentPrice = Number(price.data("price"));
+                console.log("Current price:", currentPrice);
+                loadUser(function (error, user) {
+                    if (error) {
+                        $("#text-error").html("Có lỗi xảy ra khi tải thông tin người dùng.");
+                        $("#error").addClass("swal-overlay--show-modal");
+                        return;
+                    }
+                    console.log(user);
+                    var username = user.username;
+                    var password = user.password; // Mật khẩu giả định được lấy từ phản hồi API
+                    var authHeader = "Basic " + btoa(username + ":" + password);
+
+                    var showtime_id = $('#showtime_id').val();
+                    console.log("Showtime id: ", showtime_id);
+
+                    var json = JSON.stringify({
+                        "user_id": user.id,
+                        "showtime_id": showtime_id,
+                        "list_seat_id": dataParameter,
+                        "paymentMethod": "VNPAY",
+                        "price":currentPrice
+                    });
+
+                    console.log("Fetch data: ", json);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/bills/create",
+                        headers: {"Authorization": authHeader},
+                        data: json,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            // Redirect to VNPay payment URL
+                            window.location.href = data.paymentUrl;
+                        },
+                        error: function (e) {
+                            $("#text-error").html(e.responseText);
+                            $("#error").addClass("swal-overlay--show-modal");
+                            $("button").click(function (e) {
+                                location.reload(true);
+                            });
+                        }
+                    });
+                }, currentUsername);
+            });
+        } else {
+            $("#text-error").html("Bạn chưa chọn chỗ ngồi!");
+            $("#error").addClass("swal-overlay--show-modal");
+        }
+    }
+
+
+
 </script>
 </body>
 </html>
