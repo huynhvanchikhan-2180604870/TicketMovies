@@ -15,34 +15,37 @@
 <body>
 <header>
     <nav th:fragment="nav">
-        <p class="logo">
+        <a class="logo nav-link" href="/">
             Nhom<span>CHOT</span>
-        </p>
+        </a>
 
         <i class="fa fa-bars" id="menu"></i>
 
         <ul id="menu-box">
-            <div class="marker"></div>
-            <li>main</li>
-            <li>schedlues</li>
-            <li>tickets</li>
-            <li>news</li>
-            <li>contact</li>
+            <div class=""></div>
             <li>
-                <span >
+                <a class="nav-link text-light" href="/">Trang Chủ</a>
+            </li>
+            <li>
+                <a class="nav-link text-light" href="/theater-info">Chi tiết Rạp phim</a>
+            </li>
+            <li>
+                <span sec:authorize="isAuthenticated()" class="text-light">
                     Xin chào,
-                    <a href="/ticket/history" sec:authentication="name" style="margin-right: 20px;">
+                    <a class="nav-link" href="/ticket/history" sec:authentication="name" style="color: white;">
                         <img src="/images/LinhDan.jpg">
                     </a>
+
+                    <form th:action="@{/logout}" method="post">
+                         <button type="submit" class="btn btn-outline-danger">Logout</button>
+                    </form>
                 </span>
             </li>
-            <li sec:authorize="isAuthenticated()">
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit">Logout</button>
-                </form>
+            <li  >
+
             </li>
-            <li sec:authorize="!isAuthenticated()">
-                <a href="/login">Login</a>
+            <li sec:authorize="!isAuthenticated()" >
+                <a href="/login" class="nav-link text-light">Login</a>
             </li>
         </ul>
 
