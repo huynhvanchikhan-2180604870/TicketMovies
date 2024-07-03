@@ -13,5 +13,6 @@ import java.util.UUID;
 
 @Repository
 public interface ISeatRepository extends JpaRepository<Seat, UUID>, JpaSpecificationExecutor<Seat> {
-
+    @Query("select r from Seat r where r.theater.id = ?1")
+    List<Seat> getSeatByTheater_Id(UUID theater_id);
 }

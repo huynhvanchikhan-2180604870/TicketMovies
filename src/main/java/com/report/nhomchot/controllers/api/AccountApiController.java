@@ -1,94 +1,57 @@
 package com.report.nhomchot.controllers.api;
 
-
-
-
-import com.report.nhomchot.dto.UserLoginDTO;
 import com.report.nhomchot.entities.Role;
 import com.report.nhomchot.entities.User;
 import com.report.nhomchot.response.ResponseHandler;
-import com.report.nhomchot.utils.jwt.JwtUtil;
-import com.report.nhomchot.utils.repo.IUserService;
-import com.report.nhomchot.utils.service.AuthenticateService;
+import com.report.nhomchot.utils.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/accounts")
-public class AccountApiController {
+@RequestMapping("/api/users")
+public class AccountApiController{
     @Autowired
-    AuthenticateService authenticateService;
-    @Autowired
-    private JwtUtil jwtTokenUtil;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserService userService;
 
-    public AccountApiController() {
+    @GetMapping("/get-by-username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        User user = userService.findByUsername(username).orElse(null);
+        Set<Role> roles = user.getRoles().stream()
+                .map(role -> {
+                    Role r = new Role();
+                    r.setId(role.getId());
+                    r.setName(role.getName());
+                    return r;
+                })
+                .collect(Collectors.toSet());
+
+        user.setRoles(roles);
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/insert-user")
-    public ResponseEntity<Object> insertUser(@RequestBody User model){
-        // Tạo UUID cho user mới
-        model.setId(UUID.randomUUID());
-
-        // Kiểm tra và bổ sung roleName cho từng Role
-        if (model.getRoles() != null) {
-            model.setRoles(model.getRoles().stream().map(role -> {
-                if (role.getRoleName() == null || role.getRoleName().isEmpty()) {
-                    throw new RuntimeException("Role name must not be null or empty");
-                }
-                return role;
-            }).collect(Collectors.toSet()));
+    @GetMapping("/get-current-username")
+    public ResponseEntity<String> getCurrentUsername(HttpSession session) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        } else if (authentication != null && authentication.getPrincipal() instanceof String) {
+            username = (String) authentication.getPrincipal();
         }
-
-        // Lưu user mới
-        authenticateService.insertUser(model);
-        return ResponseHandler.responseBuilder("success", HttpStatus.OK, model);
+        return ResponseEntity.ok(username);
     }
-
-
-    @RequestMapping(value = "get-users", method = RequestMethod.GET)
-    public ResponseEntity<Object> getUser(){
-
-        return ResponseHandler.responseBuilder("success",
-                HttpStatus.OK,
-                authenticateService.getAllUser()
-        );
-    }
-    @RequestMapping(value = "get-roles", method = RequestMethod.GET)
-    public ResponseEntity<Object> getRole(){
-
-        return ResponseHandler.responseBuilder("success",
-                HttpStatus.OK,
-                authenticateService.getAllRole()
-        );
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Map<String,Object> createAuthenticationToken(@RequestBody UserLoginDTO userLogin){
-        Map<String, Object> result = new HashMap<>();
-        result.put("status", true);
-        User user = authenticateService.getUser(userLogin.getUsername(), userLogin.getPassword());
-        if(user == null){
-            result.put("message", "Can not login");
-            result.put("status", false);
-            return result;
-        }
-        String jwt = jwtTokenUtil.generateToken(user);
-        result.put("message", "");
-        result.put("token", jwt);
-        result.put("role", user.getRoles().stream()
-                .map(Role::getRoleName)
-                .collect(Collectors.toList())); // Assuming you have a method to get roles
-        return result;
-    }
-
 }

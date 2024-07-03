@@ -34,7 +34,7 @@ $(".slot__item").click(function () {
 function updatePrice(amount, isAdding) {
     let current = Number(price.data("price"));
     current = isAdding ? current + amount : current - amount;
-    price.text(current.toLocaleString('en-US', { style: 'currency', currency: 'VND' }));
+    price.text(current.toLocaleString('en-US', {style: 'currency', currency: 'VND'}));
     price.data("price", current);
 }
 
@@ -88,3 +88,107 @@ $("#notify-error").click(function () {
 });
 
 
+
+function loadUser(callback, username) {
+    console.log("username: ",username)
+    $.ajax({
+        type: "GET",
+        url: "/api/users/get-by-username/" + username,
+        success: function (user) {
+            console.log("User info:", user);
+            callback(null, user);
+        },
+        error: function (error) {
+            console.log("Error loading user info:", error);
+            callback(error, null);
+        }
+    });
+}
+
+function getCurrentUsername(callback) {
+    $.ajax({
+        type: "GET",
+        url: "/api/users/get-current-username",
+        success: function (username) {
+            console.log("Current username:", username);
+            callback(null, username);
+        },
+        error: function (error) {
+            console.log("Error getting current username:", error);
+            callback(error, null);
+        }
+    });
+}
+
+$("#btn-booking").click(function () {
+    if (dataParameter.length != 0) {
+        getCurrentUsername(function (error, currentUsername) {
+            if (error) {
+                $("#text-error").html("Có lỗi xảy ra khi lấy username hiện tại.");
+                $("#error").addClass("swal-overlay--show-modal");
+                return;
+            }
+
+            console.log("Calling loadUser with username:", currentUsername);
+
+            loadUser(function (error, user) {
+                if (error) {
+                    $("#text-error").html("Có lỗi xảy ra khi tải thông tin người dùng.");
+                    $("#error").addClass("swal-overlay--show-modal");
+                    return;
+                }
+                console.log(user);
+                var username = user.username;
+                var password = user.password; // Mật khẩu giả định được lấy từ phản hồi API
+                var authHeader = "Basic " + btoa(username + ":" + password);
+
+                var showtime_id = `${showtime_id}`;
+                console.log("Showtime id: ", showtime_id);
+
+                var json = JSON.stringify({
+                    "user_id":user.id,
+                    "showtime_id": showtime_id,
+                    "list_seat_id": dataParameter
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/bills/create-new-bill",
+                    headers: {"Authorization": authHeader},
+                    data: json,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        // Change status of seat
+                        $(".item--picking").addClass("item--checked");
+                        $(".item--picking").removeClass("item--picking");
+
+                        // Reset bill
+                        $(".slot").empty();
+                        price.data("price", "0");
+                        current = 0;
+                        price.text(current.toLocaleString('en-US', {style: 'currency', currency: 'VND'}));
+
+                        // Close all modal check-out
+                        $('#CreditModal').trigger('click');
+
+                        // Show notify
+                        $("#success").addClass("swal-overlay--show-modal");
+
+                        dataParameter = [];
+
+                    },
+                    error: function (e) {
+                        $("#text-error").html(e.responseText);
+                        $("#error").addClass("swal-overlay--show-modal");
+                        $("button").click(function (e) {
+                            location.reload(true);
+                        });
+                    }
+                });
+            }, currentUsername);
+        });
+    } else {
+        $("#text-error").html("Bạn chưa chọn chỗ ngồi!");
+        $("#error").addClass("swal-overlay--show-modal");
+    }
+});

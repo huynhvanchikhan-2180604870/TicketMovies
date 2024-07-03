@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block th:replace="layout::head"></th:block>
+
+<body>
+<th:block th:replace="layout::header"></th:block>
+<div class="container shadow">
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>Show time</th>
+            <th>Theater</th>
+            <th>Movie</th>
+            <th>Category</th>
+            <th>Seat</th>
+            <th>QR</th>
+        </thead>
+        <tbody>
+            <tr th:each="ticket:${tickets}">
+                <td th:text="${ticket.id}"></td>
+                <td th:text="${ticket.showtime.endTime}"></td>
+                <td th:text="${ticket.showtime.theater.name}"></td>
+                <td th:text="${ticket.showtime.movie.title}"></td>
+                <td th:text="${ticket.showtime.movie.category.name}"></td>
+                <td th:text="${ticket.seat.name}"></td>
+                <td>
+                    <img th:src="${ticket.qrImageURL}">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
